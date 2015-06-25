@@ -28,4 +28,7 @@ When you have a default format, you can leave FORMAT empty and just use eg.
 
 [TODAY]
 
+The replacement works both in the body of a campaign and the subject of the campaign.
+
+
 
