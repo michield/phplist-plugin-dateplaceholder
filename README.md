@@ -19,7 +19,7 @@ where PLACEHOLDER can be one of:
 - LASTWEEK
 - NEXTMONTH
 - LASTMONTH
-(more to follow)
+- (more to follow)
 
 and Format can be any format allowed by the date command in PHP
 
