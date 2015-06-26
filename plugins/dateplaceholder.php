@@ -19,6 +19,7 @@ class dateplaceholder extends phplistPlugin {
   public $authors = 'Michiel Dethmers';
   public $enabled = 1;
   public $description = 'Adds date related placeholders';
+  public $documentationUrl = 'https://resources.phplist.com/plugin/dateplaceholder';
   public $commandlinePluginPages= array (
   );
 
