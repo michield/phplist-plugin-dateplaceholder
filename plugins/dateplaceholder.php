@@ -6,6 +6,8 @@
  * Add date related placeholders to phpList
  * @author Michiel Dethmers
  * 
+ * v.0.2 29 Nov 2015 
+ *      - fix the placeholders when the campaign has finished sendings
  * v 0.1 22 June 2015
  * 
  * License GPLv3+
@@ -15,13 +17,15 @@
 class dateplaceholder extends phplistPlugin {
   public $name = "Date placeholder";
   public $coderoot = 'dateplaceholder/';
-  public $version = "0.1";
+  public $version = "0.2";
   public $authors = 'Michiel Dethmers';
   public $enabled = 1;
   public $description = 'Adds date related placeholders';
   public $documentationUrl = 'https://resources.phplist.com/plugin/dateplaceholder';
   public $commandlinePluginPages= array (
   );
+  
+  private $campaignIDs = array();
 
   public $settings = array(
     "dateplaceholder_defaultdateformat" => array (
@@ -30,6 +34,13 @@ class dateplaceholder extends phplistPlugin {
       'type' => "text",
       'allowempty' => 1,
       'category'=> 'general',
+    ),
+    "dateplaceholder_fixdatesonarchive" => array (
+      'value' => true,
+      'description' => 'Fix dates when archiving a campaign',
+      'type' => "boolean",
+      'allowempty' => 1,
+      'category'=> 'Archive',
     ),
   );
   
@@ -59,6 +70,15 @@ class dateplaceholder extends phplistPlugin {
   {
    # return true;
   }
+
+    public function dependencyCheck()
+    {
+        global $plugins;
+
+        return array(
+            'phpList version 3.2.0 or later' => version_compare(VERSION, '3.2') > 0,
+        );
+    }
   
   function momentInTime($offSets = array()) {
       if (empty($this->moment[0])) {
@@ -133,5 +153,15 @@ class dateplaceholder extends phplistPlugin {
   		return array(); 
   	}
   
+  function processSendingCampaignFinished($messageid,array $messagedata) {
+      $fixDates = getConfig('dateplaceholder_fixdatesonarchive');
+      if ($fixDates) {
+          setMessageData($messageid,'subject',$this->dateParse($messagedata['subject']));
+          setMessageData($messageid,'message',$this->dateParse($messagedata['message']));
+          setMessageData($messageid,'textmessage',$this->dateParse($messagedata['textmessage']));
+          setMessageData($messageid,'footer',$this->dateParse($messagedata['footer']));
+      }
+  }
+      
 
 }
