@@ -119,7 +119,8 @@ class dateplaceholder extends phplistPlugin {
   }
   
   function parseAll($placeholder,$text) {
-      preg_match_all('/\['.strtoupper($placeholder).':?(.*)\]/',$text,$matches);
+      preg_match_all("/\[$placeholder:?(.*?)\]/i",$text,$matches);
+
       for ($i = 0; $i<sizeof($matches[0]); $i++) {          
           $text = str_replace($matches[0][$i],$this->dateReplacement($placeholder,$matches[1][$i]),$text);
       }
