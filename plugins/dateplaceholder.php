@@ -119,21 +119,27 @@ class dateplaceholder extends phplistPlugin {
   }
   
   function parseAll($placeholder,$text) {
+
       preg_match_all("/\[$placeholder:?(.*?)\]/i",$text,$matches);
 
       for ($i = 0; $i<sizeof($matches[0]); $i++) {          
           $text = str_replace($matches[0][$i],$this->dateReplacement($placeholder,$matches[1][$i]),$text);
       }
+      
       return $text;
     }
-      
   
   function dateParse($text) 
   {
       
       foreach (array_keys($this->datePlaceholders) as $plH) {
          $text = $this->parseAll($plH,$text);
-      } 
+      }
+      // The change proposed will let you format all MySQL datetime fields. Usage: [[ENTERED]:d/m/Y] 
+      preg_match_all("/\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}):?(.*?)\]/", $text, $datetimes);
+      for ($i = 0; $i<sizeof($datetimes[0]); $i++) {          
+	       $text = str_replace($datetimes[0][$i], date($datetimes[2][$i],strtotime($datetimes[1][$i])),$text);
+      }
       
       return $text;
   }
